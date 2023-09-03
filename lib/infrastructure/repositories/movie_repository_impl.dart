@@ -1,10 +1,10 @@
-import 'package:cinemapedia/domain/datasources/movies_datasource.dart';
-import 'package:cinemapedia/domain/entities/movie.dart';
-import 'package:cinemapedia/domain/repositories/movies_repository.dart';
+import 'package:cinemapedia/domain_/datasources/movies_datasource.dart';
+import 'package:cinemapedia/domain_/entities/movie.dart';
+import 'package:cinemapedia/domain_/repositories/movies_repository.dart';
 
 class MovieRepositoryImpl extends MoviesRepository {
 
-  final MoviesDatasources datasources;
+  final MoviesDataSource datasources;
 
   MovieRepositoryImpl(this.datasources);
   
