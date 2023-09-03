@@ -68,10 +68,10 @@ class _HomeViewState extends ConsumerState<_HomeView> {
                     },
                   ),
                   MovieHorizontalListView(
-                    movies: nowPlayingMovies,
+                    movies: popularMovies,
                     title: 'Populates',
                     loadNextPage: () {
-                      ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
+                       ref.read(popularMoviesProvider.notifier).loadNextPage();
                     },
                   ),
                   MovieHorizontalListView(
