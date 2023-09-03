@@ -42,6 +42,7 @@ class _HomeViewState extends ConsumerState<_HomeView> {
     final topRatedMovies = ref.watch(topRatedMoviesProvider);
     final upcomingMovies = ref.watch(upcomingMoviesProvider);
     final moviesSlideShow = ref.watch(moviesSlideShowProvider);
+    return const FullScreenLoader();
     return CustomScrollView(
       slivers: [
         const SliverAppBar(
@@ -53,48 +54,45 @@ class _HomeViewState extends ConsumerState<_HomeView> {
         ),
         SliverList(
             delegate: SliverChildBuilderDelegate((context, index) {
-              return Column(
-                children: [
-                  MoviesSlidesShow(movies: moviesSlideShow),
-                  MovieHorizontalListView(
-                    movies: nowPlayingMovies,
-                    title: 'Cinema',
-                    subTitle: 'Monday 20',
-                    loadNextPage: () {
-                      ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
-                    },
-                  ),
-                  MovieHorizontalListView(
-                    movies: upcomingMovies,
-                    title: 'Upcoming',
-                    loadNextPage: () {
-                      ref.read(upcomingMoviesProvider.notifier).loadNextPage();
-                    },
-                  ),
-                  MovieHorizontalListView(
-                    movies: popularMovies,
-                    title: 'Populates',
-                    loadNextPage: () {
-                       ref.read(popularMoviesProvider.notifier).loadNextPage();
-                    },
-                  ),
-                  MovieHorizontalListView(
-                    movies: topRatedMovies,
-                    title: 'Batter ratings',
-                    subTitle: 'All times',
-                    loadNextPage: () {
-                      ref.read(topRatedMoviesProvider.notifier).loadNextPage();
-                    },
-                  ),
-                  const SizedBox(
-                    height: 50,
-                  )
-                ],
-              );
-            }, 
-            childCount: 1
-          )
-        )
+          return Column(
+            children: [
+              MoviesSlidesShow(movies: moviesSlideShow),
+              MovieHorizontalListView(
+                movies: nowPlayingMovies,
+                title: 'Cinema',
+                subTitle: 'Monday 20',
+                loadNextPage: () {
+                  ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
+                },
+              ),
+              MovieHorizontalListView(
+                movies: upcomingMovies,
+                title: 'Upcoming',
+                loadNextPage: () {
+                  ref.read(upcomingMoviesProvider.notifier).loadNextPage();
+                },
+              ),
+              MovieHorizontalListView(
+                movies: popularMovies,
+                title: 'Populates',
+                loadNextPage: () {
+                  ref.read(popularMoviesProvider.notifier).loadNextPage();
+                },
+              ),
+              MovieHorizontalListView(
+                movies: topRatedMovies,
+                title: 'Batter ratings',
+                subTitle: 'All times',
+                loadNextPage: () {
+                  ref.read(topRatedMoviesProvider.notifier).loadNextPage();
+                },
+              ),
+              const SizedBox(
+                height: 50,
+              )
+            ],
+          );
+        }, childCount: 1))
       ],
     );
   }
