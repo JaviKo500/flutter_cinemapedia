@@ -36,17 +36,59 @@ class _HomeViewState extends ConsumerState<_HomeView> {
   Widget build(BuildContext context) {
     final nowPlayingMovies = ref.watch(nowPlayingMoviesProvider);
     final moviesSlideShow = ref.watch(moviesSlideShowProvider);
-    return Column(
-      children: [
-        const CustomAppBar(),
-        MoviesSlidesShow(movies: moviesSlideShow),
-        MovieHorizontalListView(
-          movies: nowPlayingMovies,
-          title: 'Cinema',
-          subTitle: 'Monday 20',
-          loadNextPage: () {
-            ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
-          },
+    return CustomScrollView(
+      slivers: [
+        const SliverAppBar(
+          floating: true,
+          flexibleSpace: FlexibleSpaceBar(
+            centerTitle: true,
+            title: CustomAppBar(),
+          ),
+        ),
+        SliverList(
+            delegate: SliverChildBuilderDelegate((context, index) {
+              return Column(
+                children: [
+                  MoviesSlidesShow(movies: moviesSlideShow),
+                  MovieHorizontalListView(
+                    movies: nowPlayingMovies,
+                    title: 'Cinema',
+                    subTitle: 'Monday 20',
+                    loadNextPage: () {
+                      ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
+                    },
+                  ),
+                  MovieHorizontalListView(
+                    movies: nowPlayingMovies,
+                    title: 'Upcoming',
+                    subTitle: 'En this month',
+                    loadNextPage: () {
+                      ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
+                    },
+                  ),
+                  MovieHorizontalListView(
+                    movies: nowPlayingMovies,
+                    title: 'Populates',
+                    loadNextPage: () {
+                      ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
+                    },
+                  ),
+                  MovieHorizontalListView(
+                    movies: nowPlayingMovies,
+                    title: 'Batter ratings',
+                    subTitle: 'All times',
+                    loadNextPage: () {
+                      ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
+                    },
+                  ),
+                  const SizedBox(
+                    height: 50,
+                  )
+                ],
+              );
+            }, 
+            childCount: 1
+          )
         )
       ],
     );
