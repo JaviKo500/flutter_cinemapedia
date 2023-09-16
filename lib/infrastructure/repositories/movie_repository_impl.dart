@@ -34,7 +34,6 @@ class MovieRepositoryImpl extends MoviesRepository {
 
   @override
   Future<List<Movie>> getSearchMovies({required String query}) {
-    // TODO: implement getSearchMovies
     return datasources.getSearchMovies(query: query);
   }
 }
