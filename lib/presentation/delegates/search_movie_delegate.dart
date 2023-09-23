@@ -10,11 +10,12 @@ typedef SearchMovieCallback = Future<List<Movie>> Function(
 
 class SearchMovieDelegate extends SearchDelegate<Movie?> {
   final SearchMovieCallback searchMovieCallback;
-  final List<Movie> initialMovies;
+  List<Movie> initialMovies;
   StreamController<List<Movie>> debounceMovies = StreamController.broadcast();
 
   Timer? _debounceTimer;
-  SearchMovieDelegate({required this.searchMovieCallback, required this.initialMovies});
+  SearchMovieDelegate(
+      {required this.searchMovieCallback, required this.initialMovies});
 
   void clearStream() {
     debounceMovies.close();
@@ -26,8 +27,31 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
     }
     _debounceTimer = Timer(const Duration(milliseconds: 500), () async {
       final movies = await searchMovieCallback(query: query);
+      initialMovies = movies;
       debounceMovies.add(movies);
     });
+  }
+
+  Widget buildResultAndSuggestions() {
+    return StreamBuilder(
+      initialData: initialMovies,
+      stream: debounceMovies.stream,
+      builder: (context, snapshot) {
+        final movies = snapshot.data ?? [];
+        return ListView.builder(
+          itemCount: movies.length,
+          itemBuilder: (context, index) {
+            final movie = movies[index];
+            return _MovieItem(
+                movie: movie,
+                onMovieSelected: (context, movie) {
+                  clearStream();
+                  close(context, movie);
+                });
+          },
+        );
+      },
+    );
   }
 
   @override
@@ -59,32 +83,13 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
 
   @override
   Widget buildResults(BuildContext context) {
-    return const Text('buildResults');
+    return buildResultAndSuggestions();
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
     _onQueryChanged(query);
-    return StreamBuilder(
-      initialData: initialMovies,
-      stream: debounceMovies.stream,
-      // future: searchMovieCallback(query: query),
-      builder: (context, snapshot) {
-        final movies = snapshot.data ?? [];
-        return ListView.builder(
-          itemCount: movies.length,
-          itemBuilder: (context, index) {
-            final movie = movies[index];
-            return _MovieItem(
-                movie: movie,
-                onMovieSelected: (context, movie) {
-                  clearStream();
-                  close(context, movie);
-                });
-          },
-        );
-      },
-    );
+    return buildResultAndSuggestions();
   }
 }
 
