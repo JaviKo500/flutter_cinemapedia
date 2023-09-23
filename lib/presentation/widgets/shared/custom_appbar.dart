@@ -37,6 +37,7 @@ class CustomAppBar extends ConsumerWidget {
                       context: context,
                       delegate:
                         SearchMovieDelegate(
+                          initialMovies: ref.read( searchMoviesProvider ),
                           searchMovieCallback: ref.read( searchMoviesProvider.notifier ).searchMoviesByQuery
                         ),
                     ).then((movie) {

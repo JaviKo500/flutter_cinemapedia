@@ -10,10 +10,11 @@ typedef SearchMovieCallback = Future<List<Movie>> Function(
 
 class SearchMovieDelegate extends SearchDelegate<Movie?> {
   final SearchMovieCallback searchMovieCallback;
+  final List<Movie> initialMovies;
   StreamController<List<Movie>> debounceMovies = StreamController.broadcast();
 
   Timer? _debounceTimer;
-  SearchMovieDelegate({required this.searchMovieCallback});
+  SearchMovieDelegate({required this.searchMovieCallback, required this.initialMovies});
 
   void clearStream() {
     debounceMovies.close();
@@ -24,11 +25,6 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
       _debounceTimer!.cancel();
     }
     _debounceTimer = Timer(const Duration(milliseconds: 500), () async {
-      if (query.isEmpty) {
-        debounceMovies.add([]);
-        return;
-      }
-
       final movies = await searchMovieCallback(query: query);
       debounceMovies.add(movies);
     });
@@ -70,6 +66,7 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
   Widget buildSuggestions(BuildContext context) {
     _onQueryChanged(query);
     return StreamBuilder(
+      initialData: initialMovies,
       stream: debounceMovies.stream,
       // future: searchMovieCallback(query: query),
       builder: (context, snapshot) {
@@ -80,7 +77,7 @@ class SearchMovieDelegate extends SearchDelegate<Movie?> {
             final movie = movies[index];
             return _MovieItem(
                 movie: movie,
-                onMovieSelected: ( context, movie ) {
+                onMovieSelected: (context, movie) {
                   clearStream();
                   close(context, movie);
                 });
