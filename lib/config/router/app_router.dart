@@ -7,8 +7,11 @@ final appRouter = GoRouter(initialLocation: '/home/0', routes: [
       name: HomeScreen.name,
       builder: (context, state) {
         final pageIndex = state.pathParameters['page'] ?? 0;
+        final  page = int.parse( pageIndex.toString() );
         return HomeScreen(
-          page: int.parse( pageIndex.toString() ),
+          page: page > 2  || page < 0 
+            ? 0
+            : page,
         );
       },
       routes: [
