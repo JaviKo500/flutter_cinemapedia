@@ -23,4 +23,8 @@ final appRouter = GoRouter(initialLocation: '/home/0', routes: [
           },
         )
       ]),
+      GoRoute(
+        path: '/',
+        redirect: ( _, state) => '/home/0',
+      )
 ]);
