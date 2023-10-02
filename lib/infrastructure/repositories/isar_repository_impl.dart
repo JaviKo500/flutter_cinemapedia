@@ -19,6 +19,6 @@ class IsarRepositoryImpl extends LocalStorageRepository {
 
   @override
   Future<void> toggleFavorite(Movie movie) {
-    throw datasource.toggleFavorite(movie);
+    return datasource.toggleFavorite(movie);
   }
 }

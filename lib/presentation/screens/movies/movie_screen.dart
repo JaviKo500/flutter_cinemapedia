@@ -182,12 +182,12 @@ class _ActorsByMovie extends ConsumerWidget {
   }
 }
 
-class _CustomSliverAppBar extends StatelessWidget {
+class _CustomSliverAppBar extends ConsumerWidget {
   final Movie movie;
   const _CustomSliverAppBar({super.key, required this.movie});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final size = MediaQuery.of(context).size;
     return SliverAppBar(
       backgroundColor: Colors.black,
@@ -195,7 +195,9 @@ class _CustomSliverAppBar extends StatelessWidget {
       foregroundColor: Colors.white,
       actions: [
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+            ref.watch(localStorageRepositoryProvider).toggleFavorite(movie);
+          },
           icon: const Icon(Icons.favorite_border),
           // icon: const Icon(Icons.favorite_rounded, color: Colors.red,),
         )
@@ -217,35 +219,32 @@ class _CustomSliverAppBar extends StatelessWidget {
               ),
             ),
             const _CustomGradient(
-              begin: Alignment.topLeft, 
-              end: Alignment.bottomRight, 
-              stops: [
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                stops: [
                   0.0,
                   0.2
-                ], 
-              colors: [
+                ],
+                colors: [
                   Colors.black54,
                   Colors.transparent,
-                ]
-            ),
+                ]),
             const _CustomGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              stops: [0.8, 1.0],
-              colors: [Colors.transparent, Colors.black54]
-            ),
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                stops: [0.8, 1.0],
+                colors: [Colors.transparent, Colors.black54]),
             const _CustomGradient(
-              begin: Alignment.topRight,
-              end: Alignment.bottomLeft,
-              stops: [
-                0.0,
-                0.2
-              ],
-              colors: [
-                Colors.black54,
-                Colors.transparent,
-              ]
-            )
+                begin: Alignment.topRight,
+                end: Alignment.bottomLeft,
+                stops: [
+                  0.0,
+                  0.2
+                ],
+                colors: [
+                  Colors.black54,
+                  Colors.transparent,
+                ])
           ],
         ),
       ),
@@ -271,11 +270,7 @@ class _CustomGradient extends StatelessWidget {
       child: DecoratedBox(
         decoration: BoxDecoration(
             gradient: LinearGradient(
-                begin: begin,
-                end: end,
-                stops: stops,
-                colors: colors
-            )),
+                begin: begin, end: end, stops: stops, colors: colors)),
       ),
     );
   }
